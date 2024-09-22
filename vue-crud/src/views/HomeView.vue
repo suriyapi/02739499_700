@@ -62,12 +62,31 @@ const onCreate = () => {
 }
 
 const onEdit = (id) => {
-  alert('Edit ' + id)
-  console.log('Edit', id)
+  router.push('/update/'+id)
+  console.log(id)
 }
 
 const onDelete = (id) => {
-  alert('Delete ' + id)
-  console.log('Delete', id)
+  const myHeaders = new Headers()
+  myHeaders.append('Content-Type', 'application/json')
+
+  const requestOptions = {
+    method: 'DELETE',
+    headers: myHeaders,
+    redirect: 'follow'
+  };
+
+  fetch(`http://localhost:8800/api/v1/customers/${id}`, requestOptions)
+  //alt+9+6 --> (``) backtick
+    .then(response => response.json())
+    .then(result => {
+      alert(result.message)
+      console.log(result)
+      if (result.status === 'ok') {
+        router.push('/')
+      }
+      fetchData()
+    })
+    .catch(error => console.log('error', error))
 }
 </script>
